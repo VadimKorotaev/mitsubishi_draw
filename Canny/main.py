@@ -9,33 +9,38 @@ from tkinter import *
 
 
 class Window(Tk):
+
 	def __init__(self):
+
 		super().__init__()
 		self.title("Mitsubishi_draw")
 		top_frame = Frame(self, height = 2, bg = "#3F3C3C")
 		top_frame.pack(side = TOP, fill = X)
-		right_frame = Frame(self, width = 15,height = 10,bg = "#3F3C3C")
-		right_frame.pack(side = RIGHT, fill = Y)
+		self.right_frame = Frame(self, width = 15,height = 10,bg = "#3F3C3C")
+		self.right_frame.pack(side = RIGHT, fill = Y)
 		
 		
 		Label(top_frame, bg = "#3F3C3C", fg = "white").pack(side = TOP, fill = X)
 		Label(text = "Изображение", bg = "#2B2E62", fg = "white").pack(side = TOP, fill = X)
-		Button(right_frame, text = "Выбрать",height = 3, bg = "#344868", fg = "white").pack(side = TOP, fill = X)
-		Label(right_frame, text = "minVal", width = 15,height = 3, bg = "#2B2E62", fg = "white").pack(fill = X)
-		Scale(right_frame, orient = HORIZONTAL, from_ = 0, to = 255).pack(fill = X)
-		Label(right_frame, text = "maxVal", width = 15,height = 3, bg = "#2B2E62", fg = "white").pack(fill = X)
-		Scale(right_frame, orient = HORIZONTAL, from_ = 0, to = 255).pack(fill = X)
-		Label(right_frame, text = "maxLenght", width = 15,height = 3, bg = "#2B2E62", fg = "white").pack(fill = X)
-		Scale(right_frame, orient = HORIZONTAL, from_ = 0, to = 255).pack(fill = X)
-		Label(right_frame, text = "линий", width = 15,height = 2, bg = "#2B2E62", fg = "white").pack(fill = X)
-		Label(right_frame, text = "0", height = 2, bg = "#3F3C3C", fg = "white").pack(fill = Y)
-		Button(right_frame, text = "Компелировать",height = 3, bg = "#344868", fg = "white").pack(side = BOTTOM, fill = X)
-		self.canvas = Canvas( width = 640, height = 480, bg='white')
+		Button(self.right_frame, text = "Выбрать",height = 3, bg = "#344868", fg = "white").pack(side = TOP, fill = X)
+		Label(self.right_frame, text = "minVal", width = 15,height = 3, bg = "#2B2E62", fg = "white").pack(fill = X)
+		Scale(self.right_frame, orient = HORIZONTAL, from_ = 0, to = 255).pack(fill = X)
+		Label(self.right_frame, text = "maxVal", width = 15,height = 3, bg = "#2B2E62", fg = "white").pack(fill = X)
+		Scale(self.right_frame, orient = HORIZONTAL, from_ = 0, to = 255).pack(fill = X)
+		Label(self.right_frame, text = "maxLenght", width = 15,height = 3, bg = "#2B2E62", fg = "white").pack(fill = X)
+		Scale(self.right_frame, orient = HORIZONTAL, from_ = 0, to = 255).pack(fill = X)
+		Label(self.right_frame, text = "линий", width = 15,height = 2, bg = "#2B2E62", fg = "white").pack(fill = X)	
+		self.label_lines = Label(self.right_frame, text = "0", height = 2, bg = "#3F3C3C", fg = "white")	
+		self.label_lines.pack(fill = Y)	
+		Button(self.right_frame, text = "Компелировать",height = 3, bg = "#344868", fg = "white").pack(side = BOTTOM, fill = X)
+		self.canvas = Canvas( width = 640, height = 480, bg="white")
 		self.canvas.pack()
 
-	def paintig(self, img = 'test.jpg', minVal = 100, maxVal = 200, maxLength = 50):
+
+	def painting(self, img = 'test.jpg', minVal = 100, maxVal = 200, maxLength = 50):
 		generate = gl.Generate_lines(img)
-		line_list, lines  = generate.return_list(minVal, maxVal, maxLength)
+		line_list, self.lines  = generate.return_list(minVal, maxVal, maxLength)
+
 		parity = 0
 		for i in line_list:
 			parity += 1;
@@ -44,11 +49,15 @@ class Window(Tk):
 			else:
 				point_2 = i
 				self.canvas.create_line(point_1, point_2)
-		return lines
+		self.label_lines["text"] = self.lines
 
+
+	
+
+	
 if __name__ == "__main__":
 	window = Window()
-	window.paintig("img_1.jpg", 100, 200, 20)
+	window.painting("img_1.jpg", 100, 200, 20)
 	window.mainloop()
 	
 
