@@ -8,28 +8,47 @@ from tkinter import *
 
 
 
-root = Tk()
+class Window(Tk):
+	def __init__(self):
+		super().__init__()
+		self.title("Mitsubishi_draw")
+		top_frame = Frame(self, height = 2, bg = "#3F3C3C")
+		top_frame.pack(side = TOP, fill = X)
+		right_frame = Frame(self, width = 15,height = 10,bg = "#3F3C3C")
+		right_frame.pack(side = RIGHT, fill = Y)
+		
+		
+		Label(top_frame, bg = "#3F3C3C", fg = "white").pack(side = TOP, fill = X)
+		Label(text = "Изображение", bg = "#2B2E62", fg = "white").pack(side = TOP, fill = X)
+		Button(right_frame, text = "Выбрать",height = 3, bg = "#344868", fg = "white").pack(side = TOP, fill = X)
+		Label(right_frame, text = "minVal", width = 15,height = 3, bg = "#2B2E62", fg = "white").pack(fill = X)
+		Scale(right_frame, orient = HORIZONTAL, from_ = 0, to = 255).pack(fill = X)
+		Label(right_frame, text = "maxVal", width = 15,height = 3, bg = "#2B2E62", fg = "white").pack(fill = X)
+		Scale(right_frame, orient = HORIZONTAL, from_ = 0, to = 255).pack(fill = X)
+		Label(right_frame, text = "maxLenght", width = 15,height = 3, bg = "#2B2E62", fg = "white").pack(fill = X)
+		Scale(right_frame, orient = HORIZONTAL, from_ = 0, to = 255).pack(fill = X)
+		Label(right_frame, text = "линий", width = 15,height = 2, bg = "#2B2E62", fg = "white").pack(fill = X)
+		Label(right_frame, text = "0", height = 2, bg = "#3F3C3C", fg = "white").pack(fill = Y)
+		Button(right_frame, text = "Компелировать",height = 3, bg = "#344868", fg = "white").pack(side = BOTTOM, fill = X)
+		self.canvas = Canvas( width = 640, height = 480, bg='white')
+		self.canvas.pack()
 
-def paintig(img = 'test.jpg', minVal = 100, maxVal = 200, maxLength = 50):
-	generate = gl.Generate_lines(img)
-	line_list, lines  = generate.return_list(minVal, maxVal, maxLength)
-	c = Canvas(root, width=640, height=480, bg='white')
-	c.pack()
-	parity = 0
-	for i in line_list:
-		parity += 1;
-		if parity % 2 == 1:
-			point_1 = i
-		else:
-			point_2 = i
-			c.create_line(point_1, point_2)
-	return lines
-
+	def paintig(self, img = 'test.jpg', minVal = 100, maxVal = 200, maxLength = 50):
+		generate = gl.Generate_lines(img)
+		line_list, lines  = generate.return_list(minVal, maxVal, maxLength)
+		parity = 0
+		for i in line_list:
+			parity += 1;
+			if parity % 2 == 1:
+				point_1 = i
+			else:
+				point_2 = i
+				self.canvas.create_line(point_1, point_2)
+		return lines
 
 if __name__ == "__main__":
-	lines = paintig("img_1.jpg", 100, 200, 20)
-	print (lines)
-	root.mainloop()
-
-
+	window = Window()
+	window.paintig("img_1.jpg", 100, 200, 20)
+	window.mainloop()
+	
 

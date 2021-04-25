@@ -50,10 +50,10 @@ class Generate_lines():
 
 			
 if __name__ == "__main__":
+	generate = Generate_lines()
 	background = cv.imread('image/background.jpg',0)
 	parity = 0
-	generate = Generate_lines()
-	line_list, lines = generate.return_list()
+	line_list, lines = generate._return_list()
 	for i in line_list:
 		parity += 1;
 		if parity % 2 == 1:
