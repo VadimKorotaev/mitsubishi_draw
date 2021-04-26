@@ -53,7 +53,7 @@ if __name__ == "__main__":
 	generate = Generate_lines()
 	background = cv.imread('image/background.jpg',0)
 	parity = 0
-	line_list, lines = generate._return_list()
+	line_list, lines = generate.return_list()
 	for i in line_list:
 		parity += 1;
 		if parity % 2 == 1:
