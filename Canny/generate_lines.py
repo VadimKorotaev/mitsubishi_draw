@@ -6,7 +6,7 @@ import math
 
 def resize_img(picture):
 	try:
-		img = cv.imread('image/' + picture, 0)
+		img = cv.imread(picture, 0)
 		x, y = img.shape
 		if x / y > 1.33:
 			k = 640 / x
@@ -16,7 +16,7 @@ def resize_img(picture):
 			img = cv.resize(img, (int(k * y), 480))
 		return img
 	except AttributeError:
-		raise ValueError('%s is not an image' % fname)
+		pass
 
 def line_length(a,b):
 	x1,y1 = a
@@ -24,7 +24,7 @@ def line_length(a,b):
 	return math.sqrt((x1-x2)**2 + (y1-y2)**2)
 
 class Generate_lines():
-	def __init__(self, picture = 'test.jpg'):
+	def __init__(self, picture):
 		self.img = resize_img(picture)
 
 	def return_list(self, minVal = 100, maxVal = 200, maxLength = 50):
@@ -50,7 +50,7 @@ class Generate_lines():
 
 			
 if __name__ == "__main__":
-	generate = Generate_lines()
+	generate = Generate_lines('/home/vadim/git/mitsubishi_draw/Canny/image/test.jpg')
 	background = cv.imread('image/background.jpg',0)
 	parity = 0
 	line_list, lines = generate.return_list()
