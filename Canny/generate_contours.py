@@ -1,8 +1,9 @@
 
-import cv2 as cv
 import numpy as np
 from matplotlib import pyplot as plt
 from tkinter import *
+import cv2 as cv
+
 
 def resize_img(picture):
 	try:
@@ -18,28 +19,28 @@ def resize_img(picture):
 	except AttributeError:
 		pass
 
-def generate_conturs(img, minVal = 100, maxVal = 200):
+def generate_contours(img, minVal=100, maxVal=200):
 	img = resize_img(img)
 	contours, _ = cv.findContours(cv.Canny(img,minVal,maxVal), cv.RETR_LIST, cv.CHAIN_APPROX_TC89_KCOS)
 	return contours
 
 
-if __name__ == "__main__":
+if __name__  == "__main__":
 	root = Tk()
-	canvas = Canvas(root, width = 640, height = 480, bg="white")
+	canvas = Canvas(root, width=640, height=480, bg="white")
 	canvas.pack()
-	contours = generate_conturs('/home/vadim/git/mitsubishi_draw/Canny/image/test.jpg', minVal = 100, maxVal = 200)
-	for contur in contours:
+	contours = generate_contours('/home/vadim/git/mitsubishi_draw/Canny/image/test.jpg', 100, 200)
+	print(contours)
+	for contour in contours:
 		points = []
-		for point in contur:
+		for point in contour:
 			points += [point[0][0],point[0][1]]
-			print(points)
-			print('---------------------------')
+			'''print(points)
+			print('---------------------------')'''
 		try:
 			canvas.create_line(points, width = 2)
 		except TclError:
-			pass
-			
+			pass	
 	root.mainloop()
 		
 					
