@@ -5,6 +5,7 @@ import cv2 as cv
 
 from tkinter import *
 from tkinter import filedialog as fd
+import tkinter.messagebox as mb
 from ttk import Progressbar
 
 from generate_contours import *
@@ -21,6 +22,11 @@ class Window(Tk):
 		top_frame.pack(side = TOP, fill = X)
 		self.right_frame = Frame(self, width = 15,height = 10,bg = "#3F3C3C")
 		self.right_frame.pack(side = RIGHT, fill = Y)
+		self.bottom_frame = Frame(self, height = 55,bg = "#3F3C3C")
+		self.bottom_frame.pack(side = BOTTOM, fill = X) 
+		self.canvas_frame = Frame(self)
+		self.canvas_frame.pack(side = BOTTOM, expand=1) 
+		
 
 
 		Label(top_frame, bg = "#3F3C3C", fg = "white").pack(side = TOP, fill = X)
@@ -41,15 +47,16 @@ class Window(Tk):
 				width = 15,height = 4, bg = "#2B2E62", fg = "white").pack(fill = X)	
 		self.label_lines = Label(self.right_frame, text = "0", height = 2, bg = "#3F3C3C", fg = "white")	
 		self.label_lines.pack(fill = Y)	
-		self.status = Label(self.right_frame, text = "",width = 15,height = 2, bg = "#2B2E62", fg = "white")
+		self.status = Label(self.right_frame, text = "Выберете файл",width = 15,height = 3, bg = "#FCC02E", fg = 'black')
 		self.status.pack(side = BOTTOM, fill = X)
 		Button(self.right_frame, text = "Экспорт",
 		height = 3, bg = "#344868", fg = "white", command = self.___create_program_prg).pack(side = BOTTOM, fill = X)
-		self.canvas = Canvas(width = 640, height = 480, bg="white")
+		self.canvas = Canvas(self.canvas_frame, width = 640, height = 480, bg="white")
 		self.canvas.pack()
 	
 	def __painting_contours(self, _in):
 		try:
+			if self.filename == '': raise AttributeError() 
 			self.canvas.delete("all")
 			self.contours = generate_contours(self.filename, self.A.get(),self.B.get())
 			lines = 0
@@ -78,6 +85,7 @@ class Window(Tk):
 			self.__print_status('Выберете файл','warning')
 		else:
 			self.__print_status('Экспортировано','success')
+			self.__show_warning()
 
 	def __print_status(self,text,status):
 		self.status['text'] = text
@@ -90,6 +98,10 @@ class Window(Tk):
 		elif status == 'trouble':
 			self.status['bg'] = '#CE1126'
 			self.status['fg'] = 'white'
+
+	def __show_warning(self):
+		msg = "Во избежание коллизий, первый запуск производится в ручном режиме"
+		mb.showwarning("Предупреждение", msg)
 
 	def __choose_file(self):
 		try:
