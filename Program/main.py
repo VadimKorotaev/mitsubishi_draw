@@ -8,8 +8,9 @@ from tkinter import filedialog as fd
 import tkinter.messagebox as mb
 from ttk import Progressbar
 
+from generate_program import *
 from generate_contours import *
-from generate_prg import * 
+
 
 class Window(Tk):
 	def __init__(self):
@@ -50,7 +51,7 @@ class Window(Tk):
 		self.status = Label(self.right_frame, text = "Выберете файл",width = 15,height = 3, bg = "#FCC02E", fg = 'black')
 		self.status.pack(side = BOTTOM, fill = X)
 		Button(self.right_frame, text = "Экспорт",
-		height = 3, bg = "#344868", fg = "white", command = self.___create_program_prg).pack(side = BOTTOM, fill = X)
+		height = 3, bg = "#344868", fg = "white", command = self.__save_file).pack(side = BOTTOM, fill = X)
 		self.canvas = Canvas(self.canvas_frame, width = 640, height = 480, bg="white")
 		self.canvas.pack()
 	
@@ -76,16 +77,6 @@ class Window(Tk):
 			pass
 		else:
 			self.__print_status('Отрисовано','success')
-
-	def ___create_program_prg(self):
-		try:
-			if self.filename == '': raise AttributeError() 
-			create_file(self.contours)
-		except AttributeError:
-			self.__print_status('Выберете файл','warning')
-		else:
-			self.__print_status('Экспортировано','success')
-			self.__show_warning()
 
 	def __print_status(self,text,status):
 		self.status['text'] = text
@@ -119,7 +110,19 @@ class Window(Tk):
 			if self.filename == '': raise AttributeError() 
 		except AttributeError:
 			self.__print_status('Выберете файл','warning')
-			
+
+	def __save_file(self):
+		try:
+			if self.filename == '': raise AttributeError() 
+			new_file = fd.asksaveasfile(title="Сохранить файл", initialdir = "programs", defaultextension=".prg",
+										filetypes=(("Текстовый файл", "*.prg"),))
+			if new_file:
+				new_file.write(create_program(self.contours))
+				new_file.close()
+				self.__print_status('Экспортировано','success')
+				self.__show_warning()
+		except AttributeError:
+			self.__print_status('Выберете файл','warning')
 
 if __name__ == "__main__":
 	window = Window()
