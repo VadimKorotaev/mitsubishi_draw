@@ -1,12 +1,14 @@
 
 def create_program(contours):
-	axis_z = '0'
+	axis_z = '177'
 	program = ''
-	for contur in contours:
-		for point in contur:
-			program +=  ('''
-p1 =(+%s.00,+%s.00,+%s.00)
-Mov p1'''%(point[0][0],point[0][1],axis_z))
+	number = 0
+	for contour in contours:
+		for point in contour:
+			number += 1
+			program += ('''%s p1 = (+%s.00, +%s.00, +%s.00)\n'''%(number, int(point[0][0] / 2 + 100), int(point[0][1] / 2 + 100), axis_z))
+			number += 1
+			program += ('''%s Mow p1\n'''%(number))
 	return program
 
 if __name__  == "__main__":
