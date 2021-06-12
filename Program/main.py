@@ -39,11 +39,11 @@ class Window(Tk):
 		self.A = IntVar()
 		self.B = IntVar()
 		Scale(self.right_frame, orient = HORIZONTAL,
-				from_ = 0, to = 255, variable = self.A, command = self.__painting_contours).pack(fill = X)
+				from_ = 0, to = 255, variable = self.A, command = self.__updating_scale).pack(fill = X)
 		Label(self.right_frame, text = "maxVal",
 				width = 15,height = 3, bg = "#2B2E62", fg = "white").pack(fill = X)
 		Scale(self.right_frame, orient = HORIZONTAL, 
-				from_ = 0, to = 255, variable = self.B, command = self.__painting_contours).pack(fill = X)
+				from_ = 0, to = 255, variable = self.B, command = self.__updating_scale).pack(fill = X)
 		Label(self.right_frame, text = "линий",
 				width = 15,height = 4, bg = "#2B2E62", fg = "white").pack(fill = X)	
 		self.label_lines = Label(self.right_frame, text = "0", height = 2, bg = "#3F3C3C", fg = "white")	
@@ -55,28 +55,42 @@ class Window(Tk):
 		self.canvas = Canvas(self.canvas_frame, width = 640, height = 480, bg="white")
 		self.canvas.pack()
 	
-	def __painting_contours(self, _in):
+	def __updating_scale(self, __in):
 		try:
-			if self.filename == '': raise AttributeError() 
-			self.canvas.delete("all")
-			self.contours = generate_contours(self.filename, self.A.get(),self.B.get())
-			lines = 0
-			for contur in self.contours:
-				points = []
-				for point in contur:
-					points += [point[0][0],point[0][1]]
-					lines += 1
-				try:
-					self.label_lines["text"] = lines	
-					self.canvas.create_line(points, width = 2)
-				except TclError:
-					pass					
+			self.__start_painting_contours(self.file_name, self.A.get(), self.B.get())
 		except AttributeError:
 			self.__print_status('Выберете файл','warning')
+
+	def __start_painting_contours(self, file_name, A, B):
+		try:
+			if file_name == '': raise AttributeError()
+			contours = generate_contours(file_name, A, B)
+			self.canvas.delete("all")
+			self.after(50, self.__painting_contours, 0, contours, 0)
+			self.contours = contours
+		except AttributeError:
+			self.__print_status('Выберете файл','warning')			
 		except NameError:
-			pass
+			pass	
+
+	def __painting_contours(self, i, contours, lines):
+		try:
+			contour = contours[i]
+			i += 1
+			points = []
+			for point in contour:
+				points += [point[0][0],point[0][1]]
+				lines += 1
+			try:
+				self.canvas.create_line(points, width = 2)
+				self.label_lines["text"] = lines
+			except TclError:
+				pass
+			self.after(1, self.__painting_contours, i, contours, lines)	
+		except IndexError:
+			self.__print_status('Отрисовано','success')	
 		else:
-			self.__print_status('Отрисовано','success')
+			self.__print_status('Подождите','warning')
 
 	def __print_status(self,text,status):
 		self.status['text'] = text
@@ -96,7 +110,7 @@ class Window(Tk):
 
 	def __choose_file(self):
 		try:
-			self.filename = fd.askopenfilename(title = "Открыть файл", initialdir = "image",
+			self.file_name = fd.askopenfilename(title = "Открыть файл", initialdir = "image",
 				filetypes = ( 
 					("PNG files", "*.png"),
 					("JPG files", "*.jpg"),
@@ -107,13 +121,10 @@ class Window(Tk):
 			self.A.set(0)
 			self.B.set(0)
 			self.label_lines["text"] = '0'
-			if self.filename == '': raise AttributeError() 
 		except AttributeError:
 			self.__print_status('Выберете файл','warning')
 
 	def __save_file(self):
-		try:
-			if self.filename == '': raise AttributeError() 
 			new_file = fd.asksaveasfile(title="Сохранить файл", initialdir = "programs", defaultextension=".prg",
 										filetypes=(("Текстовый файл", "*.prg"),))
 			if new_file:
@@ -121,8 +132,7 @@ class Window(Tk):
 				new_file.close()
 				self.__print_status('Экспортировано','success')
 				self.__show_warning()
-		except AttributeError:
-			self.__print_status('Выберете файл','warning')
+
 
 if __name__ == "__main__":
 	window = Window()
