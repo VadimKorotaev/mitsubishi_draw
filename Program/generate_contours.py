@@ -29,14 +29,14 @@ if __name__  == "__main__":
 	root = Tk()
 	canvas = Canvas(root, width=640, height=480, bg="white")
 	canvas.pack()
-	contours = generate_contours('/home/vadim/git/mitsubishi_draw/Canny/image/test.jpg', 100, 200)
+	contours = generate_contours('/home/vadim/git/mitsubishi_draw/Program/image/test.jpg', 100, 200)
 	print(contours)
 	for contour in contours:
 		points = []
 		for point in contour:
 			points += [point[0][0],point[0][1]]
-			'''print(points)
-			print('---------------------------')'''
+			print(points)
+			print('---------------------------')
 		try:
 			canvas.create_line(points, width = 2)
 		except TclError:
