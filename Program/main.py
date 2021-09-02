@@ -1,4 +1,3 @@
-
 import numpy as np
 from matplotlib import pyplot as plt
 import cv2 as cv
@@ -28,6 +27,7 @@ class Window(Tk):
 		self.canvas_frame = Frame(self)
 		self.canvas_frame.pack(side = BOTTOM, expand=1) 
 		
+
 
 		Label(top_frame, bg = "#3F3C3C", fg = "white").pack(side = TOP, fill = X)
 		Label(text = "Изображение", bg = "#2B2E62", fg = "white").pack(side = TOP, fill = X)
@@ -66,7 +66,7 @@ class Window(Tk):
 			contours = generate_contours(file_name, A, B)
 			self.canvas.delete("all")
 			self.after(50, self.__painting_contours, 0, contours, 0)
-			self.contours = np.array([contours])
+			self.contours = contours
 		except AttributeError:
 			self.__print_status('Выберете файл','warning')			
 		except NameError:
@@ -74,15 +74,15 @@ class Window(Tk):
 
 	def __painting_contours(self, i, contours, lines):
 		try:
-			contour = np.array(contours[i])
+			contour = contours[i]
 			i += 1
 			points = []
 			for point in contour:
 				points += [point[0][0],point[0][1]]
 				lines += 1
-				self.label_lines["text"] = lines
 			try:
 				self.canvas.create_line(points, width = 2)
+				self.label_lines["text"] = lines
 			except TclError:
 				pass
 			self.after(1, self.__painting_contours, i, contours, lines)	
@@ -136,4 +136,3 @@ class Window(Tk):
 if __name__ == "__main__":
 	window = Window()
 	window.mainloop()
-	
