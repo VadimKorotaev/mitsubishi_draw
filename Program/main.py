@@ -131,6 +131,7 @@ class Window(Tk):
 				new_file.close()
 				self.__print_status('Экспортировано','success')
 				self.__show_warning()
+				print(self.contours)
 
 
 if __name__ == "__main__":
