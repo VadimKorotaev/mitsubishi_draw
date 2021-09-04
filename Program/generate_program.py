@@ -10,8 +10,8 @@ def create_program(contours):
 		for point in contour:
 			number_line += 1
 			axis_z = axis_z_down if number_contour / 2 == 1 else axis_z_up
-			point_x = '''+%s'''%(int(point[0][0] / 2 + 200)) if int(point[0][0] / 2 + 200) > 0 else '''%s'''%(int(point[0][0] / 2 + 200))
-			point_y = '''+%s'''%(int(point[0][1] / 2 - 50)) if int(point[0][1] / 2 - 50) > 0 else '''%s'''%(int(point[0][1] / 2 - 50))
+			point_x = '''+%s'''%(int(point[0][1] / 2 + 220)) if int(point[0][1] / 2 + 220) > 0 else '''%s'''%(int(point[0][1] / 2 + 220))
+			point_y = '''+%s'''%(int(point[0][0] / 2 - 50)) if int(point[0][0] / 2 - 50) > 0 else '''%s'''%(int(point[0][0] / 2 - 50))
 			program += ('''%s p1 = (%s.00,%s.00,+%s)\n'''%(number_line, point_x, point_y, axis_z))
 			number_line += 1
 			program += ('''%s Mov p1\n'''%(number_line))
