@@ -29,9 +29,30 @@ class Window(Tk):
 		Label(top_frame, bg = "#3F3C3C", fg = "white").pack(side = TOP, fill = X)
 		Label(text = "Изображение", bg = "#2B2E62", fg = "white").pack(side = TOP, fill = X)
 
+		'''Нижняя панель'''
+		self.bottom_frame = Frame(self, height = 55, bg = "#3F3C3C")
+		self.bottom_frame.pack(side = BOTTOM, fill = X)
+
+		self.status = Label(self.bottom_frame, text = "Выберете файл",width = 15,height = 3, bg = "#FCC02E", fg = 'black')
+		self.status.pack(side = RIGHT, fill = X)
+
+		self.Label_z_entry = LabelFrame(self.bottom_frame, height = 55, width = 100,
+										bg = "#CE1126", fg = "white", text = "Ось Z" )
+		self.Label_z_entry.pack(side = LEFT, padx = 5, pady = 5)
+		img = Img.open("sourse/warning.png")
+		img = img.resize((25, 23), Img.ANTIALIAS)
+		img = ImageTk.PhotoImage(img)
+		warning_img = Label(self.Label_z_entry, image=img, bg = "#CE1126")
+		warning_img.image = img
+		warning_img.pack(side = LEFT)
+
+		self.z_entry = Entry(self.Label_z_entry, width = 10)
+		self.z_entry.pack(padx = 5)
+
 		'''Правая панель'''
 		self.right_frame = Frame(self, width = 15,height = 10,bg = "#3F3C3C")
 		self.right_frame.pack(side = RIGHT, fill = Y)
+
 		Button(self.right_frame, text = "Выбрать",
 				height = 3, bg = "#344868", fg = "white", command = self.__choose_file).pack(side = TOP, fill = X)
 		Label(self.right_frame, text = "minVal",
@@ -48,25 +69,8 @@ class Window(Tk):
 				width = 15,height = 4, bg = "#2B2E62", fg = "white").pack(fill = X)	
 		self.label_lines = Label(self.right_frame, text = "0", height = 2, bg = "#3F3C3C", fg = "white")	
 		self.label_lines.pack(fill = Y)	
-		self.status = Label(self.right_frame, text = "Выберете файл",width = 15,height = 3, bg = "#FCC02E", fg = 'black')
-		self.status.pack(side = BOTTOM, fill = X)
 		Button(self.right_frame, text = "Экспорт",
 				height = 3, bg = "#344868", fg = "white", command = self.__save_file).pack(side = BOTTOM, fill = X)
-
-		'''Нижняя панель'''
-		self.bottom_frame = Frame(self, height = 55, bg = "#3F3C3C")
-		self.bottom_frame.pack(side = BOTTOM, fill = X)
-		self.Label_z_entry = LabelFrame(self.bottom_frame, height = 55, width = 100,
-										bg = "#CE1126", fg = "white", text = "Ось Z" )
-		self.Label_z_entry.pack(side = LEFT, padx = 5, pady = 5)
-		img = Img.open("sourse/warning.png")
-		img = img.resize((25, 23), Img.ANTIALIAS)
-		img = ImageTk.PhotoImage(img)
-		warning_img = Label(self.Label_z_entry, image=img, bg = "#CE1126")
-		warning_img.image = img
-		warning_img.pack(side = LEFT)
-		self.z_entry = Entry(self.Label_z_entry, width = 10)
-		self.z_entry.pack(padx = 5)
 
 		'''Холст'''
 		self.canvas_frame = Frame(self)
