@@ -6,6 +6,8 @@ from tkinter import *
 from tkinter import filedialog as fd
 import tkinter.messagebox as mb
 from ttk import Progressbar
+from PIL import ImageTk
+from PIL import Image as Img
 
 from generate_program import *
 from generate_contours import *
@@ -17,20 +19,19 @@ class Window(Tk):
 		self.__configure_window()
 
 	def __configure_window(self):
+
+		'''Заголовок'''
 		self.title("Mitsubishi_draw")
+
+		'''Верхняя панель'''
 		top_frame = Frame(self, height = 2, bg = "#3F3C3C")
 		top_frame.pack(side = TOP, fill = X)
-		self.right_frame = Frame(self, width = 15,height = 10,bg = "#3F3C3C")
-		self.right_frame.pack(side = RIGHT, fill = Y)
-		self.bottom_frame = Frame(self, height = 55,bg = "#3F3C3C")
-		self.bottom_frame.pack(side = BOTTOM, fill = X) 
-		self.canvas_frame = Frame(self)
-		self.canvas_frame.pack(side = BOTTOM, expand=1) 
-		
-
-
 		Label(top_frame, bg = "#3F3C3C", fg = "white").pack(side = TOP, fill = X)
 		Label(text = "Изображение", bg = "#2B2E62", fg = "white").pack(side = TOP, fill = X)
+
+		'''Правая панель'''
+		self.right_frame = Frame(self, width = 15,height = 10,bg = "#3F3C3C")
+		self.right_frame.pack(side = RIGHT, fill = Y)
 		Button(self.right_frame, text = "Выбрать",
 				height = 3, bg = "#344868", fg = "white", command = self.__choose_file).pack(side = TOP, fill = X)
 		Label(self.right_frame, text = "minVal",
@@ -50,10 +51,29 @@ class Window(Tk):
 		self.status = Label(self.right_frame, text = "Выберете файл",width = 15,height = 3, bg = "#FCC02E", fg = 'black')
 		self.status.pack(side = BOTTOM, fill = X)
 		Button(self.right_frame, text = "Экспорт",
-		height = 3, bg = "#344868", fg = "white", command = self.__save_file).pack(side = BOTTOM, fill = X)
-		self.canvas = Canvas(self.canvas_frame, width = 640, height = 480, bg="white")
+				height = 3, bg = "#344868", fg = "white", command = self.__save_file).pack(side = BOTTOM, fill = X)
+
+		'''Нижняя панель'''
+		self.bottom_frame = Frame(self, height = 55, bg = "#3F3C3C")
+		self.bottom_frame.pack(side = BOTTOM, fill = X)
+		self.Label_z_entry = LabelFrame(self.bottom_frame, height = 55, width = 100,
+										bg = "#CE1126", fg = "white", text = "Ось Z" )
+		self.Label_z_entry.pack(side = LEFT, padx = 5, pady = 5)
+		img = Img.open("sourse/warning.png")
+		img = img.resize((25, 23), Img.ANTIALIAS)
+		img = ImageTk.PhotoImage(img)
+		warning_img = Label(self.Label_z_entry, image=img, bg = "#CE1126")
+		warning_img.image = img
+		warning_img.pack(side = LEFT)
+		self.z_entry = Entry(self.Label_z_entry, width = 10)
+		self.z_entry.pack(padx = 5)
+
+		'''Холст'''
+		self.canvas_frame = Frame(self)
+		self.canvas_frame.pack(side = BOTTOM, expand = 1) 	
+		self.canvas = Canvas(self.canvas_frame, width = 640, height = 480, bg = "white")
 		self.canvas.pack()
-	
+
 	def __updating_scale(self, __in):
 		try:
 			self.__start_painting_contours(self.file_name, self.A.get(), self.B.get())
