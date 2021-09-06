@@ -34,7 +34,7 @@ class Window(Tk):
 		self.bottom_frame.pack(side = BOTTOM, fill = X)
 
 		self.status = Label(self.bottom_frame, text = "Выберете файл",width = 15,height = 3, bg = "#FCC02E", fg = 'black')
-		self.status.pack(side = RIGHT, fill = X)
+		self.status.pack(side = RIGHT, fill = Y)
 
 		self.Label_z_entry = LabelFrame(self.bottom_frame, height = 55, width = 100,
 										bg = "#CE1126", fg = "white", text = "Ось Z" )
