@@ -47,6 +47,14 @@ def create_program(contours):
 				program += ('''%s p1 = (%s.00,%s.00,+%s)\n'''%(number_line, axis_x, axis_y, axis_z))
 				number_line += 1
 				program += ('''%s Mov p1\n'''%(number_line))
+		else:
+			number_line += 1 
+			axis_x = create_axis_x(point[0][1])
+			axis_y = create_axis_y(point[0][0])
+			axis_z = axis_z_up 
+			program += ('''%s p1 = (%s.00,%s.00,+%s)\n'''%(number_line, axis_x, axis_y, axis_z))
+			number_line += 1
+			program += ('''%s Mov p1\n'''%(number_line))
 	return program
 
 if __name__  == "__main__":
