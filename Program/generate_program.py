@@ -7,7 +7,7 @@ def create_axis_y(point):
 	axis_y = '''+%s'''%(int(point / 2 - 50)) if int(point / 2 - 50) > 0 else '''%s'''%(int(point / 2 - 50))
 	return axis_y
 
-def create_program(contours): 
+def create_program(contours, val_z_entry): 
 	axis_z_up = '190.00'
 	axis_z_down = '184.86'
 	program = ''

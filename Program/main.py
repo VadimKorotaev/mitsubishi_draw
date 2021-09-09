@@ -46,7 +46,8 @@ class Window(Tk):
 		warning_img.image = img
 		warning_img.pack(side = LEFT)
 
-		self.z_entry = Entry(self.Label_z_entry, width = 10)
+		self.z_entry = Entry(self.Label_z_entry, width = 10, validate = "key",
+								 validatecommand = (self.register(self.__validate_z_entry),"%P")) 
 		self.z_entry.pack(padx = 5)
 
 		'''Правая панель'''
@@ -77,6 +78,16 @@ class Window(Tk):
 		self.canvas_frame.pack(side = BOTTOM, expand = 1) 	
 		self.canvas = Canvas(self.canvas_frame, width = 640, height = 480, bg = "white")
 		self.canvas.pack()
+
+	def __validate_z_entry(self, input):
+		try:
+			x = float(input)
+			return True
+		except ValueError:
+			if input == '':
+				return True
+			else:
+				return False
 
 	def __updating_scale(self, __in):
 		try:
@@ -127,9 +138,17 @@ class Window(Tk):
 			self.status['bg'] = '#CE1126'
 			self.status['fg'] = 'white'
 
-	def __show_warning(self):
+	def __show_warning_collision(self):
 		msg = "Во избежание коллизий, первый запуск производится в ручном режиме"
 		mb.showwarning("Предупреждение", msg)
+
+	def __show_warning_trouble_save(self):
+		msg = "Нечего Экспортировать. Выберете файл"
+		mb.showwarning("Ошибка экспорта", msg)
+
+	def __show_warning_troble_entry_z(self):
+		msg = "неверное значение оси z!"
+		mb.showwarning("Ошибка экспорта", msg)
 
 	def __choose_file(self):
 		try:
@@ -148,13 +167,21 @@ class Window(Tk):
 			self.__print_status('Выберете файл','warning')
 
 	def __save_file(self):
+		try:
 			new_file = fd.asksaveasfile(title="Сохранить файл", initialdir = "programs", defaultextension=".prg",
-										filetypes=(("Текстовый файл", "*.prg"),))
+									filetypes=(("Текстовый файл", "*.prg"),))
 			if new_file:
-				new_file.write(create_program(self.contours))
+				val_z_entry = self.z_entry.get()
+				new_file.write(create_program(self.contours, float(val_z_entry)))
 				new_file.close()
-				self.__print_status('Экспортировано','success')
-				self.__show_warning()
+				self.__print_status("Экспортировано","success")
+				self.__show_warning_collision()
+		except ValueError:
+			self.__print_status("неверное\nзначение оси z!","warning")
+			self.__show_warning_troble_entry_z()
+		except AttributeError:
+			self.__print_status("Выберете файл", "warning")
+			self.__show_warning_trouble_save()
 
 if __name__ == "__main__":
 	window = Window()
